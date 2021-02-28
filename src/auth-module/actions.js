@@ -15,7 +15,7 @@ export default function makeAuthActions(feathersClient, globalModels) {
         .then((response) => {
           if (response.accessToken) {
             commit("setAccessToken", response.accessToken);
-            commit("setPayload", payload);
+            commit("setPayload", response);
             commit("setUser", response.user);
             commit("unsetAuthenticatePending");
 
