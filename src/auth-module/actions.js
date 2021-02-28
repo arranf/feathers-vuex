@@ -1,14 +1,17 @@
 export default function makeAuthActions(feathersClient, globalModels) {
   return {
     authenticate(store, data) {
-      const { commit, state, dispatch } = store;
+      const { commit, state } = store;
 
       commit("setAuthenticatePending");
       if (state.errorOnAuthenticate) {
         commit("clearAuthenticateError");
       }
-      return feathersClient
-        .authenticate(data)
+
+      let promise = !!data
+        ? feathersClient.authenticate(data)
+        : feathersClient.reAuthenticate();
+      return promise
         .then((response) => {
           if (response.accessToken) {
             commit("setAccessToken", response.accessToken);
